@@ -16,7 +16,7 @@ Game::Game():
   for (int y = 5; y < 8; ++y)
     for (int x = (y + 1) % 2; x < 8; x += 2)
       board_[x][y] = WHITE;
-                               
+//Постройка доски и размещение шашек                               
 }
 
 Game::Cell Game::cell(int x, int y) const
@@ -42,6 +42,7 @@ void Game::selectCell(int x, int y)
     selectedCellY_ = -1;
   }
 }
+//Выбор клетки для хотьбы
 
 void Game::move(int x, int y)
 {
@@ -49,17 +50,17 @@ void Game::move(int x, int y)
   assert(selectedCellY_ != -1);
 
   std::vector<Move> listOfLegalMoves;
-  getListOfLegalMoves(WHITE_SIDE, listOfLegalMoves);
-  if (listOfLegalMoves.empty())
+  getListOfLegalMoves(WHITE_SIDE, listOfLegalMoves);//проверка доступных ходов
+  if (listOfLegalMoves.empty())//Проверка возможности ходов
   {
     *this = Game();
-    return;
+    return;//завершение игры
   }
 
   Step step = Step(Pos(selectedCellX_, selectedCellY_), Pos(x, y));
 
   bool moved = false;
-
+//Подготовка к ходу
   for (std::vector<Move>::iterator i = listOfLegalMoves.begin(); i != listOfLegalMoves.end(); ++i)
   {
     if (step == i->front() && (!isAfterJump_ || (isAfterJump_ && abs(selectedCellX_ - x) == 2)))
